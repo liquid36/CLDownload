@@ -19,9 +19,9 @@ import org.json.JSONArray;
 
 public class WebParsing
 {
-	public List<JSONObject> getLineas()
+	public JSONArray getLineas()
 	{
-		List<JSONObject> list = new ArrayList<JSONObject>();
+		JSONArray list = new JSONArray();
 		try {		
 			HTTPMethod h = new HTTPMethod();
 			String web = h.getHTTPGetString("http://www.etr.gov.ar/cuandollega.php",new JSONObject());
@@ -40,8 +40,8 @@ public class WebParsing
 					String jo     = "{ \"linea\": \"" + slinea + "\" , \"ids\": [ " + sid + "] , \"name\": \"" + nombre + "\"   }"  ;
 						
 					JSONObject o = new JSONObject( jo  );
-					System.console().writer().println(o.toString());
-					list.add(o);
+					//System.console().writer().println(o.toString());
+					list.put(o);
 				}
 			}	
 			
@@ -77,18 +77,49 @@ public class WebParsing
 		
 	}
 	
-	public JSONArray getInfoParadas(Integer idColectivo,Integer idCalle,Integer idInt)
+	public JSONObject getInfoParadas(Integer idColectivo,Integer idCalle,Integer idInt)
 	{
-		HTTPMethod h = new HTTPMethod();
-		JSONObject o = new JSONObject();
-		o.put("accion", "getInfoParadas");
-		o.put("idLinea", idColectivo.toString());
-		o.put("idCalle", idCalle.toString());
-		o.put("idInt", idInt.toString());
-		String s = h.getHTTPGetString("http://www.etr.gov.ar/ajax/getData.php",o);
-		JSONArray a = new JSONArray(s.substring(1));
-		return a;
-		
+		try {
+			HTTPMethod h = new HTTPMethod();
+			JSONObject o = new JSONObject();
+			JSONObject r;
+			o.put("accion", "getInfoParadas");
+			o.put("idLinea", idColectivo.toString());
+			o.put("idCalle", idCalle.toString());
+			o.put("idInt", idInt.toString());
+			String web = h.getHTTPGetString("http://www.etr.gov.ar/ajax/getData.php",o);
+			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			int start = 1;
+			int end = web.indexOf("<script") - 5;
+			
+			//System.console().writer().println(idCalle + "  " + idInt + "  " + web);
+			
+			String webF = web.substring(start,end).replaceAll("&nbsp;"," ").replaceAll("<br>","<br/>") ;	
+			Document doc = dBuilder.parse(new InputSource( new StringReader(webF)));
+			NodeList nList = doc.getElementsByTagName("tr");
+			if (nList.item(1).getNodeType() == Node.ELEMENT_NODE) {
+				NodeList tdList = ((Element) nList.item(1) ).getElementsByTagName("td");
+				//System.console().writer().println(tdList.getLength());
+				Element e1 = (Element) tdList.item(0);
+				Element e2 = (Element) tdList.item(1);
+				
+				String parada = e1.getFirstChild().getFirstChild().getNodeValue();
+				String texto = e2.getFirstChild().getNodeValue();
+				String bandera = "";
+				String desc = texto;
+				if (texto.indexOf(">") > 0) {
+					String [] ss = texto.split(">");
+					desc = ss[1].trim();
+					bandera = ss[0].trim();
+				}
+				String jo     = "{ \"parada\": " + parada + " , \"desc\": \"" + desc + "\" , \"bandera\": \"" + bandera + "\"  }"  ;
+				return new JSONObject( jo  );	
+			}
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 }
