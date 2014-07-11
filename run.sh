@@ -1,2 +1,2 @@
 #/bin/bash
-java -cp ./build/:/home/sam/Descargas/android-studio/lib/* Main
+java -cp ./libs/*:./build/:/home/sam/Descargas/android-studio/lib/* Main

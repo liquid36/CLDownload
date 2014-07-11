@@ -60,8 +60,11 @@ public class WebParsing
 		o.put("accion", "getCalle");
 		o.put("idLinea", idColectivo.toString());
 		String s = h.getHTTPGetString("http://www.etr.gov.ar/ajax/getData.php",o);
-		JSONArray a = new JSONArray(s.substring(1));
-		return a;	
+		try {
+			JSONArray a = new JSONArray(s.substring(1));
+			return a;	
+		} catch (Exception e) { return new JSONArray(); }
+		
 	}
 	
 	public JSONArray getInterseccion(Integer idColectivo,Integer idCalle)
@@ -97,23 +100,26 @@ public class WebParsing
 			String webF = web.substring(start,end).replaceAll("&nbsp;"," ").replaceAll("<br>","<br/>") ;	
 			Document doc = dBuilder.parse(new InputSource( new StringReader(webF)));
 			NodeList nList = doc.getElementsByTagName("tr");
-			if (nList.item(1).getNodeType() == Node.ELEMENT_NODE) {
-				NodeList tdList = ((Element) nList.item(1) ).getElementsByTagName("td");
-				//System.console().writer().println(tdList.getLength());
-				Element e1 = (Element) tdList.item(0);
-				Element e2 = (Element) tdList.item(1);
-				
-				String parada = e1.getFirstChild().getFirstChild().getNodeValue();
-				String texto = e2.getFirstChild().getNodeValue();
-				String bandera = "";
-				String desc = texto;
-				if (texto.indexOf(">") > 0) {
-					String [] ss = texto.split(">");
-					desc = ss[1].trim();
-					bandera = ss[0].trim();
+			//System.console().writer().println("Numero de paradas: " + ( nList.getLength() - 1) );
+			for (int i = 1;i < nList.getLength() ; i++) { 
+				if (nList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+					NodeList tdList = ((Element) nList.item(i) ).getElementsByTagName("td");
+					//System.console().writer().println(tdList.getLength());
+					Element e1 = (Element) tdList.item(0);
+					Element e2 = (Element) tdList.item(1);
+					
+					String parada = e1.getFirstChild().getFirstChild().getNodeValue();
+					String texto = e2.getFirstChild().getNodeValue();
+					String bandera = "";
+					String desc = texto;
+					if (texto.indexOf(">") > 0) {
+						String [] ss = texto.split(">");
+						desc = ss[1].trim();
+						bandera = ss[0].trim();
+					}
+					String jo     = "{ \"parada\": " + parada + " , \"desc\": \"" + desc + "\" , \"bandera\": \"" + bandera + "\"  }"  ;
+					return new JSONObject( jo  );	
 				}
-				String jo     = "{ \"parada\": " + parada + " , \"desc\": \"" + desc + "\" , \"bandera\": \"" + bandera + "\"  }"  ;
-				return new JSONObject( jo  );	
 			}
 			return null;
 		} catch (Exception e) {
