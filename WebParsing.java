@@ -80,7 +80,7 @@ public class WebParsing
 		
 	}
 	
-	public JSONObject getInfoParadas(Integer idColectivo,Integer idCalle,Integer idInt)
+	public JSONArray getInfoParadas(Integer idColectivo,Integer idCalle,Integer idInt)
 	{
 		try {
 			HTTPMethod h = new HTTPMethod();
@@ -100,28 +100,35 @@ public class WebParsing
 			String webF = web.substring(start,end).replaceAll("&nbsp;"," ").replaceAll("<br>","<br/>") ;	
 			Document doc = dBuilder.parse(new InputSource( new StringReader(webF)));
 			NodeList nList = doc.getElementsByTagName("tr");
-			//System.console().writer().println("Numero de paradas: " + ( nList.getLength() - 1) );
+			
+			//System.console().writer().println(idCalle + "  " + idInt + "  " + webF);
+			//if (idCalle == 1473 && idInt == 1083)
+			//	System.console().writer().println("Numero de paradas: " + ( nList.getLength() - 1) );
+			JSONArray paradas = new JSONArray();
 			for (int i = 1;i < nList.getLength() ; i++) { 
 				if (nList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-					NodeList tdList = ((Element) nList.item(i) ).getElementsByTagName("td");
-					//System.console().writer().println(tdList.getLength());
-					Element e1 = (Element) tdList.item(0);
-					Element e2 = (Element) tdList.item(1);
-					
-					String parada = e1.getFirstChild().getFirstChild().getNodeValue();
-					String texto = e2.getFirstChild().getNodeValue();
-					String bandera = "";
-					String desc = texto;
-					if (texto.indexOf(">") > 0) {
-						String [] ss = texto.split(">");
-						desc = ss[1].trim();
-						bandera = ss[0].trim();
-					}
-					String jo     = "{ \"parada\": " + parada + " , \"desc\": \"" + desc + "\" , \"bandera\": \"" + bandera + "\"  }"  ;
-					return new JSONObject( jo  );	
+					try {
+						NodeList tdList = ((Element) nList.item(i) ).getElementsByTagName("td");
+						//System.console().writer().println(tdList.getLength());
+						Element e1 = (Element) tdList.item(0);
+						Element e2 = (Element) tdList.item(1);
+						
+						String parada = e1.getFirstChild().getFirstChild().getNodeValue();
+						String texto = e2.getFirstChild().getNodeValue();
+						String bandera = "";
+						String desc = texto;
+						if (texto.indexOf(">") > 0) {
+							String [] ss = texto.split(">");
+							desc = ss[1].trim();
+							bandera = ss[0].trim();
+						}
+						String jo     = "{ \"parada\": " + parada + " , \"desc\": \"" + desc + "\" , \"bandera\": \"" + bandera + "\"  }"  ;
+						//System.console().writer().println(jo );
+						paradas.put(new JSONObject(jo));	
+					} catch (Exception e) {} 
 				}
 			}
-			return null;
+			return paradas;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

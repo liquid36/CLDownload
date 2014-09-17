@@ -20,7 +20,7 @@ public class CLDownload
 			if (calles.getJSONObject(i).getString("id").equals(c.getString("id")) )
 				return;
 		calles.put(c);
-		System.console().writer().println("Adding calle " + c.getString("desc"));
+		//System.console().writer().println("Adding calle " + c.getString("desc"));
 	}
 	
 	private void addColectivo(Integer id, String linea, String name, String bandera)
@@ -31,7 +31,7 @@ public class CLDownload
 		c.put("name",name);
 		c.put("bandera",bandera);
 		lineas.put(c);
-		System.console().writer().println("Adding colectivo " + name);
+		//System.console().writer().println("Adding colectivo " + name);
 	}
 	
 	private void addParada(Integer idColectivo, Integer idCalle, Integer idInter, Integer parada, String desc)
@@ -43,7 +43,7 @@ public class CLDownload
 		c.put("parada",parada);
 		c.put("desc",desc);
 		paradas.put(c);
-		System.console().writer().println("Adding parada " + idColectivo + " " + idCalle + "  " + idInter + "  " + parada);
+		//System.console().writer().println("Adding parada " + idColectivo + " " + idCalle + "  " + idInter + "  " + parada);
 	}
 	
 	public void toDB()
@@ -87,7 +87,7 @@ public class CLDownload
 	{
 		WebParsing h = new WebParsing();		
 		JSONArray line = h.getLineas();
-		for(int i = 1 ; i < line.length();i++) {
+		for(int i = 28 ; i < line.length();i++) {
 			JSONObject oC = line.getJSONObject(i);
 			JSONArray ids = oC.getJSONArray("ids");
 			for(int j = 0 ; j < ids.length();j++) {
@@ -105,10 +105,13 @@ public class CLDownload
 						JSONObject oInter = JAinter.getJSONObject(l);
 						Integer idInter = Integer.parseInt(oInter.getString("id"));
 						addCalle(oInter);
-						JSONObject info = h.getInfoParadas(idColectivo,idCalle,idInter);
 						
-						addParada(idColectivo,idCalle,idInter, info.getInt("parada") , info.getString("desc")); 
-					
+						JSONArray info = h.getInfoParadas(idColectivo,idCalle,idInter);
+						
+						for(int ww = 0 ; ww < info.length();ww++) {
+							JSONObject op = info.getJSONObject(ww);
+							addParada(idColectivo,idCalle,idInter, op.getInt("parada") , op.getString("desc")); 
+						}
 						
 					}
 				}			
