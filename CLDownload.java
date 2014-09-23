@@ -87,7 +87,7 @@ public class CLDownload
 	{
 		WebParsing h = new WebParsing();		
 		JSONArray line = h.getLineas();
-		for(int i = 28 ; i < line.length();i++) {
+		for(int i = 0 ; i < line.length();i++) {
 			JSONObject oC = line.getJSONObject(i);
 			JSONArray ids = oC.getJSONArray("ids");
 			for(int j = 0 ; j < ids.length();j++) {
