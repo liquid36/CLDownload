@@ -80,6 +80,16 @@ public class WebParsing
 		
 	}
 	
+	public static String remove1(String input) {
+		String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ";
+		String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC";
+		String output = input;
+		for (int i=0; i<original.length(); i++) {
+			output = output.replace(original.charAt(i), ascii.charAt(i));
+		}
+		return output;
+	}
+	
 	public JSONArray getInfoParadas(Integer idColectivo,Integer idCalle,Integer idInt)
 	{
 		try {
