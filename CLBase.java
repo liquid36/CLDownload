@@ -14,15 +14,43 @@ public class CLBase
 			c = DriverManager.getConnection("jdbc:sqlite:test.db");
 			c.setAutoCommit(false);
 			stmt = c.createStatement();
-			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS colectivos (id INTEGER, name TEXT, bandera TEXT , linea TEXT)");
+			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS colectivos (id INTEGER, name TEXT, bandera TEXT , linea TEXT, cl Boolean)");
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS calles (id INTEGER, desc TEXT)");
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS paradas (idColectivo INTEGER, idCalle INTEGER,idInter INTEGER, parada INTEGER , desc TEXT)");
+			
+			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS recorridos (id INTEGER, sentido TEXT , desc TEXT)");
+			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS rcdreng (id INTEGER, sentido TEXT , num INTEGER, lat TEXT, lon TEXT)");
+			
 			System.out.println("Opened database successfully");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Opened database failed");
 		}
 	}	
+	
+	public void deleteRecorridosTable()
+	{
+		try {
+			String sql = "DELETE FROM colectivos;" ;
+			stmt.executeUpdate(sql);
+			sql = "DELETE FROM recorridos;" ;
+			stmt.executeUpdate(sql);
+			sql = "DELETE FROM rcdreng;" ;
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
+	public void deleteTable()
+	{
+		try {
+			String sql = "DELETE FROM calles;" ;
+			stmt.executeUpdate(sql);
+			sql = "DELETE FROM colectivos;" ;
+			stmt.executeUpdate(sql);
+			sql = "DELETE FROM paradas;" ;
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}
 	
 	public void insertCalle(JSONObject o)
 	{
@@ -36,9 +64,9 @@ public class CLBase
 	public void insertColectivo(JSONObject o)
 	{
 		try {
-			String sql = "INSERT INTO colectivos (id,name,bandera,linea) " +
+			String sql = "INSERT INTO colectivos (id,name,bandera,linea,cl) " +
 						 "VALUES (" + Integer.toString(o.getInt("id")) + ",'" + o.getString("name") 
-						 + "','" + o.getString("bandera") + "','" + o.getString("linea")  +  "');"; 
+						 + "','" + o.getString("bandera") + "','" + o.getString("linea")  +  "', " + (o.getBoolean("cl")?"1":"0") + " );"; 
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {e.printStackTrace();}
 	}
@@ -65,6 +93,27 @@ public class CLBase
 		}	
 	}
 	
+	// Para los recorridos -------------------------------------------------------------------------------
+	// Para los recorridos -------------------------------------------------------------------------------
+	
+	public void insertRecorrido(Integer id, String sentido ,String desc)
+	{
+		try {
+			String sql = "INSERT INTO recorridos (id,sentido,desc) " +
+						 "VALUES (" + Integer.toString(id) + ",'" + sentido + "','" + desc + "'  );"; 
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
+	public void insertRcdReng(Integer id, String sentido ,Integer num, String lat, String lon)
+	{
+		try {
+			String sql = "INSERT INTO rcdreng (id,sentido,num,lat,lon) " +
+						 "VALUES (" + Integer.toString(id) + ",'" + sentido + "'," + Integer.toString(num) + 
+						 " , '" + lat + "','" + lon +  "');"; 
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}
 	
 	/*public static void main( String args[] )
 	{

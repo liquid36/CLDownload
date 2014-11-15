@@ -30,6 +30,7 @@ public class CLDownload
 		c.put("linea",linea);
 		c.put("name",name);
 		c.put("bandera",bandera);
+		c.put("cl",true);
 		lineas.put(c);
 		//System.console().writer().println("Adding colectivo " + name);
 	}
@@ -49,6 +50,7 @@ public class CLDownload
 	public void toDB()
 	{
 		CLBase db = new CLBase();
+		db.deleteTable();
 		for(int j = 0 ; j < calles.length();j++) {
 			db.insertCalle(calles.getJSONObject(j));
 		}

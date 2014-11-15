@@ -64,7 +64,6 @@ public class WebParsing
 			JSONArray a = new JSONArray(s.substring(1));
 			return a;	
 		} catch (Exception e) { return new JSONArray(); }
-		
 	}
 	
 	public JSONArray getInterseccion(Integer idColectivo,Integer idCalle)
@@ -144,5 +143,96 @@ public class WebParsing
 			return null;
 		}
 	}
+	//***************************************************************************************************
+	//***************************************************************************************************
+	
+	// Desde la página de recorridos
+	public JSONArray getLineasFromRecorridos()
+	{
+		JSONArray list = new JSONArray();
+		try {		
+			HTTPMethod h = new HTTPMethod();
+			String web = h.getHTTPGetString("http://www.emr.gov.ar/recorridos.php",new JSONObject());
+			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			int startI = web.indexOf("</select>") + 10;
+			int start = web.indexOf("<select",startI) - 2;
+			int end = web.indexOf("</select>",startI) + 10;
+			String webF = web.substring(start,end).replaceAll("&iacute;","i") ;	
+			Document doc = dBuilder.parse(new InputSource( new StringReader(webF)));
+			NodeList nList = doc.getElementsByTagName("option");
+			for (int i = 1;i < nList.getLength() ; i++) {
+				if (nList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+					Element e = (Element) nList.item(i);
+					String slinea = e.getAttribute("value");
+					String nombre    = e.getAttribute("descLinea");
+					
+					int in = nombre.lastIndexOf(" ");
+					if (slinea.equals("47")) in = nombre.indexOf(" ");
+					String lastWord = nombre.substring(in + 1);
+					nombre = nombre.substring(0,in);
+					
+					String jo     = "{\"id\":" + slinea  + " ,\"linea\": \"" + nombre + "\" , \"bandera\": \"" + lastWord + "\",\"name\": \"" + nombre + "\", \"cl\":false   }"  ;
+					JSONObject o = new JSONObject(jo);
+					//System.console().writer().println(jo);
+					list.put(o);
+				}
+			}	
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return list;
+		}
+	}
+	
+	
+	// Desde la página de recorridos
+	public JSONArray getRecorridos(Integer idLinea)
+	{
+		HTTPMethod h = new HTTPMethod();
+		JSONObject o = new JSONObject();
+		o.put("idlinea", idLinea.toString());
+		String s = h.getHTTPGetString("http://www.emr.gov.ar/includes/chtupV2/ajax/getSentidoLinea.php",o);
+		try {
+			JSONArray a = new JSONArray(s);
+			return a;	
+		} catch (Exception e) {e.printStackTrace(); return new JSONArray(); }
+	}
+	
+	// Desde la página de recorridos
+	public JSONArray getPointRecorrido(Integer idLinea,String direccion)
+	{
+		JSONArray list = new JSONArray();
+		try {		
+			HTTPMethod h = new HTTPMethod();
+			String web = h.getHTTPGetString("https://sites.google.com/site/etrkml/kml/" + idLinea.toString() + direccion + ".kml",new JSONObject());
+			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document doc = dBuilder.parse(new InputSource( new StringReader(web)));
+			
+			NodeList nList = doc.getElementsByTagName("coordinates");
+			for (int i = 0;i < nList.getLength() ; i++) {
+				if (nList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+					Element e = (Element) nList.item(i);
+					String coordenadas = e.getFirstChild().getNodeValue();					
+					String [] coor = coordenadas.split(" ");
+					for (int j = 0;j < coor.length ; j++) {
+						String cood1 = coor[j];						
+						if (!cood1.trim().equals("")) {
+							String c [] = cood1.split(",");
+							String jo  = "{ \"lat\": \"" + c[1]+ "\" , \"lon\": \"" + c[0] + "\",\"num\": \"" + j + "\"   }"  ;
+							JSONObject o = new JSONObject(jo);
+							list.put(o);	
+						}
+					}					
+				}
+			}
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return list;
+		}
+	}
+	
+	
+	//  http://www.emr.gov.ar/includes/chtupV2/ajax/getSentidoLinea.php?idlinea=1	
 	
 }
