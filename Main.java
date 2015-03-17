@@ -5,11 +5,11 @@ public class Main
 {
 	public static void main(String [] args)
 	{
-		//CLDownload cd = new CLDownload();
-		//cd.download();
-		//cd.toDB();		
-		RCDDownload rcd = new RCDDownload();
-		rcd.download();
-		rcd.close();
+		CLDownload cd = new CLDownload();
+		cd.download();
+		cd.toDB();		
+		//RCDDownload rcd = new RCDDownload();
+		//rcd.download();
+		//rcd.close();
 	}
 }
