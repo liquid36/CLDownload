@@ -8,6 +8,8 @@ public class Main
 		CLDownload cd = new CLDownload();
 		cd.download();
 		cd.toDB();		
+		cd.toMYSQL();
+		
 		//RCDDownload rcd = new RCDDownload();
 		//rcd.download();
 		//rcd.close();

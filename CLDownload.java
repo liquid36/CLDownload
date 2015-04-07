@@ -63,6 +63,22 @@ public class CLDownload
 		db.Close();
 	}
 	
+	public void toMYSQL()
+	{
+		MYSQLBase db = new MYSQLBase();
+		db.deleteTable();
+		for(int j = 0 ; j < calles.length();j++) {
+			db.insertCalle(calles.getJSONObject(j));
+		}
+		for(int j = 0 ; j < lineas.length();j++) {
+			db.insertColectivo(lineas.getJSONObject(j));
+		}
+		for(int j = 0 ; j < paradas.length();j++) {
+			db.insertParadas(paradas.getJSONObject(j));
+		}
+		db.Close();
+	}
+	
 	public void toFile()
 	{
 		try {
@@ -90,8 +106,9 @@ public class CLDownload
 		WebParsing h = new WebParsing();		
 		JSONArray line = h.getLineas();
 		for(int i = 0 ; i < line.length();i++) {
+			System.console().writer().println("Bajando la linea " + i);	
 			JSONObject oC = line.getJSONObject(i);
-			JSONArray ids = oC.getJSONArray("ids");
+			JSONArray ids = oC.getJSONArray("ids");			
 			for(int j = 0 ; j < ids.length();j++) {
 				int idColectivo = ids.getInt(j);
 				addColectivo(idColectivo,oC.getString("linea"),oC.getString("name"),"");
