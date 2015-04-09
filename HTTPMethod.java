@@ -72,7 +72,7 @@ public class HTTPMethod
 			StringBuilder sb = new StringBuilder();
 			while ((line = br.readLine()) != null) 
 				sb.append(line);
-			byte[] asciiArray = sb.toString().getBytes("ASCII");	
+			byte[] asciiArray = sb.toString().getBytes("UTF-8");	
 			return new String(asciiArray);
 		} catch (Exception e) {e.printStackTrace();return "";}
     }
@@ -86,7 +86,7 @@ public class HTTPMethod
 			StringBuilder sb = new StringBuilder();
 			while ((line = br.readLine()) != null) 
 				sb.append(line);
-			byte[] asciiArray = sb.toString().getBytes("ASCII");	
+			byte[] asciiArray = sb.toString().getBytes("UTF-8");	
 			return new String(asciiArray);
 		} catch (Exception e) {e.printStackTrace(); return "";}
     }

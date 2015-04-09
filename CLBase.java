@@ -42,6 +42,14 @@ public class CLBase
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	
+	public void delete_table(String table_name)
+	{
+		try {
+			String sql = "DELETE FROM " + table_name + ";" ; ;
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
 	public void deleteTable()
 	{
 		try {
@@ -93,6 +101,17 @@ public class CLBase
 		} catch (Exception e) {
 			System.out.println("Close Failed");
 		}	
+	}
+	
+	
+	public void insertGeostreetD(String idCalle,String idInter,String lat,String lng,String sin_lat,String cos_lat,String sin_lng,String cos_lng)
+	{
+		try {
+			String sql = "INSERT INTO geostreetD " +
+						 "VALUES (" + idCalle + "," + idInter + "," + lat + "," + lng + "," + sin_lat + "," + cos_lat + "," + sin_lng + "," + cos_lng +  ");"; 
+							
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
 	}
 	
 	// Para los recorridos -------------------------------------------------------------------------------

@@ -5,10 +5,12 @@ public class Main
 {
 	public static void main(String [] args)
 	{
-		CLDownload cd = new CLDownload();
-		cd.download();
-		cd.toDB();		
-		cd.toMYSQL();
+		//CLDownload cd = new CLDownload();
+		//cd.download();
+		//cd.toDB();		
+		//cd.toMYSQL();
+		new MYSQLBase().descargarGeoStreet();
+		
 		
 		//RCDDownload rcd = new RCDDownload();
 		//rcd.download();

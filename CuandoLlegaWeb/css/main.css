@@ -1,0 +1,29 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+html,body,.container-fluid,.cuerpo, #map-canvas {
+	height:100%;
+}
+
+#barra {
+	overflow: scroll;
+	height:100%;
+	padding:0px;
+}
+
+.list-group-item:hover {
+	background-color:#98FFEC;
+}
+
+.green {
+	background-color:#57FF81;
+}
+
+.coordenadas {
+	color:grey;
+}

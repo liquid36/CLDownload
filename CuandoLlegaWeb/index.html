@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Cuando Llega - Geolocalizador de puntos</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+ 
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Geolocalizador</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li  class="active"><a id="txtCalle" href="#"></a></li>
+            <li><a id="txtCuanto" href="#about"></a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <form class="navbar-form navbar-right role="search">
+			<div class="input-group">
+			  <input id="srcInput" type="text" class="form-control" placeholder="Search for...">
+			  <span class="input-group-btn">
+				<button id="srcBT" class="btn btn-default" type="button">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span> 
+				</button>
+			  </span>
+			</div><!-- /input-group -->  
+			<select id="selectFiltro" class="form-control">
+			  <option value="1">Por completar</option>
+			  <option value="2">Completas</option>
+			  <option value="3">Todas</option>
+			</select>  
+			<button id="btSave"   type="button" class="btn btn-success " disabled="disabled">Grabar</button>
+			<button id="btCancel" type="button" class="btn btn-danger "  disabled="disabled">Cancelar</button>
+		  </form>
+          
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row cuerpo">
+			<div id="map-canvas" class="col-md-10">
+			
+			</div>
+			<div id="barra" class="col-md-2">
+				
+			</div>
+			
+		</div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

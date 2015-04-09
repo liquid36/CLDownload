@@ -11,7 +11,7 @@ public class MYSQLBase
 	{
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			c = DriverManager.getConnection("","", "");
+			c = DriverManager.getConnection("jdbc:mysql://sam.162.243.6.106.xip.io/sam","sam", "cower1990");
 			c.setAutoCommit(false);
 			stmt = c.createStatement();
 			//stmt.executeUpdate("CREATE TABLE IF NOT EXISTS colectivos (id INTEGER, name TEXT, bandera TEXT , linea TEXT, cl Boolean)");
@@ -94,6 +94,25 @@ public class MYSQLBase
 			System.out.println("Close Failed");
 		}	
 	}
+	
+	public void descargarGeoStreet()
+	{
+		try {
+			CLBase db = new CLBase();
+			db.delete_table("geostreetD");
+			ResultSet rs = stmt.executeQuery ("select * from geostreetD");
+			while (rs.next()) 
+			{ 
+				System.console().writer().println("Buscando puntos");	
+				db.insertGeostreetD(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8));
+			}
+			db.Close();
+			
+		}catch(Exception e) {e.printStackTrace();}
+		
+		
+	}
+	
 	
 	// Para los recorridos -------------------------------------------------------------------------------
 	// Para los recorridos -------------------------------------------------------------------------------
