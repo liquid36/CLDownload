@@ -201,37 +201,52 @@ public class WebParsing
 	// Desde la página de recorridos
 	public JSONArray getPointRecorrido(Integer idLinea,String direccion)
 	{
-		JSONArray list = new JSONArray();
-		try {		
-			HTTPMethod h = new HTTPMethod();
-			String web = h.getHTTPGetString("https://sites.google.com/site/etrkml/kml/" + idLinea.toString() + direccion + ".kml",new JSONObject());
-			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = dBuilder.parse(new InputSource( new StringReader(web)));
-			
-			NodeList nList = doc.getElementsByTagName("coordinates");
-			for (int i = 0;i < nList.getLength() ; i++) {
-				if (nList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-					Element e = (Element) nList.item(i);
-					String coordenadas = e.getFirstChild().getNodeValue();					
-					String [] coor = coordenadas.split(" ");
-					for (int j = 0;j < coor.length ; j++) {
-						String cood1 = coor[j];						
-						if (!cood1.trim().equals("")) {
-							String c [] = cood1.split(",");
-							String jo  = "{ \"lat\": \"" + c[1]+ "\" , \"lon\": \"" + c[0] + "\",\"num\": \"" + j + "\"   }"  ;
-							JSONObject o = new JSONObject(jo);
-							list.put(o);	
-						}
-					}					
-				}
-			}
-			return list;
+		HTTPMethod h = new HTTPMethod();
+		String name = idLinea.toString() + direccion + ".kml";
+		String url = "https://sites.google.com/site/etrkml/kml/" + name; 
+		try {					
+			String web = h.getHTTPGetString(url,new JSONObject());
+			return parserKML(web);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return list;
+			try {
+				System.console().writer().println("Descargando y deszipiando ");
+				UnzipUtility unzip = new UnzipUtility();
+				h.donwloadFile(url,"doc.zip");				
+				unzip.unzip("doc.zip","docs");
+				String s = h.openFile("docs/doc.kml");
+				return parserKML(s);
+				
+			} catch (Exception ee) {
+				ee.printStackTrace();
+				return new JSONArray(); 
+			}
 		}
 	}
 	
+	public JSONArray parserKML(String web) throws Exception
+	{
+		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		Document doc = dBuilder.parse(new InputSource( new StringReader(web)));
+		JSONArray list = new JSONArray();	
+		NodeList nList = doc.getElementsByTagName("coordinates");
+		for (int i = 0;i < nList.getLength() ; i++) {
+			if (nList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) nList.item(i);
+				String coordenadas = e.getFirstChild().getNodeValue();							
+				String [] coor = coordenadas.replace("\n","").split(" ");
+				for (int j = 0;j < coor.length ; j++) {
+					String cood1 = coor[j];						
+					if (!cood1.trim().equals("")) {
+						String c [] = cood1.split(",");
+						String jo  = "{ \"lat\": \"" + c[1]+ "\" , \"lon\": \"" + c[0] + "\",\"num\": \"" + j + "\"   }"  ;	
+						JSONObject o = new JSONObject(jo);
+						list.put(o);	
+					}
+				}					
+			}
+		}
+		return list;
+	}
 	
 	//  http://www.emr.gov.ar/includes/chtupV2/ajax/getSentidoLinea.php?idlinea=1	
 	

@@ -14,16 +14,52 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.util.Set;
 import java.util.List;
-import java.util.ArrayList;
-
+import java.util.ArrayList; 
 
 
 public class HTTPMethod 
 {
-    //public statis string URL = www.etr.gov.ar; 
+
+	
+	public boolean CopyFile(InputStream in,String file)
+    {		
+        try {
+			OutputStream out = new FileOutputStream(file);
+            byte[] buff = new byte[1024];
+            int read = 0;
+            while ((read = in.read(buff)) > 0)
+                out.write(buff, 0, read);
+            in.close();
+            out.close();
+            return true;
+        } catch (Exception e) {e.printStackTrace(); return  false;}
+    }
+
+	public void donwloadFile(String URL,String desc)
+	{
+		InputStream in = getHTTPGet(URL,new JSONObject());
+		CopyFile(in,desc);
+	}
+	
+	public String openFile(String File) 
+    {
+		try { 
+			FileInputStream fis   = new FileInputStream(File);
+			StringBuilder builder = new StringBuilder();
+			int ch;
+			while((ch = fis.read()) != -1){
+				builder.append((char)ch);
+			}
+			byte[] asciiArray = builder.toString().getBytes("UTF-8");	
+			return new String(asciiArray);
+		} catch (Exception e) {e.printStackTrace(); return "";}
+    }
 
     public InputStream getHTTPGet(String URL, JSONObject o) {
 	InputStream content = null;

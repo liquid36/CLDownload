@@ -4,15 +4,20 @@ import java.io.PrintWriter;
 public class RCDDownload
 {
 	private CLBase db;
+	private MYSQLBase mysql;
 	public RCDDownload()
 	{
 		db = new CLBase();
 		db.deleteRecorridosTable();
+		mysql = new MYSQLBase();
+		mysql.deleteRecorridosTable();
+		
 	}
 	
 	public void close()
 	{
 		db.Close();
+		mysql.Close();
 	}
 	
 	public void download()
@@ -23,6 +28,7 @@ public class RCDDownload
 			try {
 				JSONObject oC = lines.getJSONObject(i);
 				db.insertColectivo(oC);
+				mysql.insertColectivo(oC);
 				System.console().writer().println("Buscando Recorridos para " + oC.getInt("id") );
 				findRecorridos(oC.getInt("id"));
 			} catch (Exception e) {e.printStackTrace(); }
@@ -38,7 +44,7 @@ public class RCDDownload
 			JSONObject oC = recorridos.getJSONObject(i);
 			db.insertRecorrido(id, oC.getString("idpto").toLowerCase() , oC.getString("desc"));
 			try {
-				System.console().writer().println("Buscando puntos para " + id + " " + oC.getString("idpto").toLowerCase());
+				System.console().writer().print("Buscando puntos para " + id + " " + oC.getString("idpto").toLowerCase());
 				findPuntosRecorrido(id,oC.getString("idpto").toLowerCase());
 			} catch (Exception e) {e.printStackTrace(); }
 		}			
@@ -48,12 +54,20 @@ public class RCDDownload
 	{
 		WebParsing h = new WebParsing();		
 		JSONArray recorridos = h.getPointRecorrido(id,sentido);
-		System.console().writer().println("Encontre " +  recorridos.length() +   "  puntos para " + id + " " + sentido );
+		String sqls = "";
+		System.console().writer().println(" ->  " +  recorridos.length() +   "  puntos");
 		for(int i = 0 ; i < recorridos.length();i++) {
 			JSONObject oC = recorridos.getJSONObject(i);
-			db.insertRcdReng(id,sentido, i , oC.getString("lat"),oC.getString("lon"));
+			sqls += "(" + Integer.toString(id) + ",'" + sentido + "'," + Integer.toString(i) + 
+						 " , '" + oC.getString("lat") + "','" + oC.getString("lon") +  "')"
+					+ ( i + 1 == recorridos.length() ? "" : ",")	 ; 
 			
-		}		
+			db.insertRcdReng(id,sentido, i , oC.getString("lat"),oC.getString("lon"));			
+			//mysql.insertRcdReng(id,sentido, i , oC.getString("lat"),oC.getString("lon"));	
+		}	
+		//db.insertRcdReng(sqls);			
+		mysql.insertRcdReng(sqls);		
+		
 	}
 
 }

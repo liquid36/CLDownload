@@ -1,7 +1,7 @@
 <?php
 
-$link = mysql_connect( ) or die('No se pudo conectar: ' . mysql_error());
-mysql_select_db(' ') or die('No se pudo seleccionar la base de datos');
+$link = mysql_connect('sam.162.243.6.106.xip.io', 'sam', 'cower1990') or die('No se pudo conectar: ' . mysql_error());
+mysql_select_db('sam') or die('No se pudo seleccionar la base de datos');
 
 $idCalle = $_POST["idCalle"];
 $data = $_POST["data"];

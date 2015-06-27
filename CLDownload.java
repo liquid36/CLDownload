@@ -55,7 +55,7 @@ public class CLDownload
 			db.insertCalle(calles.getJSONObject(j));
 		}
 		for(int j = 0 ; j < lineas.length();j++) {
-			db.insertColectivo(lineas.getJSONObject(j));
+			db.updateColectivo(lineas.getJSONObject(j));
 		}
 		for(int j = 0 ; j < paradas.length();j++) {
 			db.insertParadas(paradas.getJSONObject(j));
@@ -71,7 +71,7 @@ public class CLDownload
 			db.insertCalle(calles.getJSONObject(j));
 		}
 		for(int j = 0 ; j < lineas.length();j++) {
-			db.insertColectivo(lineas.getJSONObject(j));
+			db.updateColectivo(lineas.getJSONObject(j));
 		}
 		for(int j = 0 ; j < paradas.length();j++) {
 			db.insertParadas(paradas.getJSONObject(j));

@@ -47,12 +47,20 @@ public class MYSQLBase
 		try {
 			String sql = "DELETE FROM calles;" ;
 			stmt.executeUpdate(sql);
-			sql = "DELETE FROM colectivos;" ;
-			stmt.executeUpdate(sql);
+			//sql = "DELETE FROM colectivos;" ;
+			//stmt.executeUpdate(sql);
 			sql = "DELETE FROM paradas;" ;
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {e.printStackTrace();}
 	}
+	
+	public void updateColectivo(JSONObject o)
+	{
+		try {
+			String sql = "UPDATE colectivos SET cl = 1 WHERE id = " + Integer.toString(o.getInt("id"));
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}	
 	
 	public void insertCalle(JSONObject o)
 	{
@@ -103,7 +111,7 @@ public class MYSQLBase
 			ResultSet rs = stmt.executeQuery ("select * from geostreetD");
 			while (rs.next()) 
 			{ 
-				System.console().writer().println("Buscando puntos");	
+				//System.console().writer().println("Buscando puntos");	
 				db.insertGeostreetD(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8));
 			}
 			db.Close();
@@ -132,6 +140,15 @@ public class MYSQLBase
 			String sql = "INSERT INTO rcdreng (id,sentido,num,lat,lon) " +
 						 "VALUES (" + Integer.toString(id) + ",'" + sentido + "'," + Integer.toString(num) + 
 						 " , '" + lat + "','" + lon +  "');"; 
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
+	public void insertRcdReng(String sqls) //Integer id, String sentido ,Integer num, String lat, String lon)
+	{
+		try {			
+			String sql = "INSERT INTO rcdreng (id,sentido,num,lat,lon) " +
+						 "VALUES  " + sqls ; 
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {e.printStackTrace();}
 	}

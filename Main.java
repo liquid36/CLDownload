@@ -9,11 +9,15 @@ public class Main
 		//cd.download();
 		//cd.toDB();		
 		//cd.toMYSQL();
-		new MYSQLBase().descargarGeoStreet();
 		
 		
-		//RCDDownload rcd = new RCDDownload();
-		//rcd.download();
-		//rcd.close();
+		//new MYSQLBase().descargarGeoStreet();
+		
+		
+		RCDDownload rcd = new RCDDownload();
+		rcd.download();
+		rcd.close();
+		
+		
 	}
 }

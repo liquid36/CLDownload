@@ -1,7 +1,7 @@
 <?php
 
-$link = mysql_connect( ) or die('No se pudo conectar: ' . mysql_error());
-mysql_select_db(' ') or die('No se pudo seleccionar la base de datos');
+$link = mysql_connect('sam.162.243.6.106.xip.io', 'sam', 'cower1990') or die('No se pudo conectar: ' . mysql_error());
+mysql_select_db('sam') or die('No se pudo seleccionar la base de datos');
 
 if ($_GET["action"] == "calle") {	
 	
@@ -77,6 +77,7 @@ select * from geostreetD where (abs(lat + 32.947341) < 0.005360  ) AND abs(lng +
 
 insert into geostreetD select idCalle,idInter,lat,lng,sin(radians(lat)),cos(radians(lat)),sin(radians(lng)),cos(radians(lng)) from geostreet ;
 */
+
 
 ?>
 

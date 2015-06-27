@@ -55,8 +55,8 @@ public class CLBase
 		try {
 			String sql = "DELETE FROM calles;" ;
 			stmt.executeUpdate(sql);
-			sql = "DELETE FROM colectivos;" ;
-			stmt.executeUpdate(sql);
+			//sql = "DELETE FROM colectivos;" ;
+			//stmt.executeUpdate(sql);
 			sql = "DELETE FROM paradas;" ;
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {e.printStackTrace();}
@@ -80,6 +80,14 @@ public class CLBase
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {e.printStackTrace();}
 	}
+	
+	public void updateColectivo(JSONObject o)
+	{
+		try {
+			String sql = "UPDATE colectivos SET cl = 1 WHERE id = " + Integer.toString(o.getInt("id"));
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}	
 	
 	public void insertParadas(JSONObject o)
 	{
