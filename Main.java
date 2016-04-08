@@ -5,19 +5,18 @@ public class Main
 {
 	public static void main(String [] args)
 	{
-		//CLDownload cd = new CLDownload();
-		//cd.download();
-		//cd.toDB();		
-		//cd.toMYSQL();
-		
-		
-		//new MYSQLBase().descargarGeoStreet();
-		
-		
-		RCDDownload rcd = new RCDDownload();
+
+		/*RCDDownload rcd = new RCDDownload();
 		rcd.download();
 		rcd.close();
-		
-		
+
+		CLDownload cd = new CLDownload();
+		cd.download();
+		cd.toDB();
+		cd.toMYSQL();*/
+
+
+		new MYSQLBase().descargarGeoStreet();
+
 	}
 }

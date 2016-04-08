@@ -33,7 +33,7 @@ public class MYSQLBase
 	public void deleteRecorridosTable()
 	{
 		try {
-			String sql = "DELETE FROM colectivos;" ;
+			String sql = "DELETE FROM colec_rcd;" ;
 			stmt.executeUpdate(sql);
 			sql = "DELETE FROM recorridos;" ;
 			stmt.executeUpdate(sql);
@@ -47,9 +47,9 @@ public class MYSQLBase
 		try {
 			String sql = "DELETE FROM calles;" ;
 			stmt.executeUpdate(sql);
-			//sql = "DELETE FROM colectivos;" ;
-			//stmt.executeUpdate(sql);
 			sql = "DELETE FROM paradas;" ;
+			stmt.executeUpdate(sql);
+			sql = "DELETE FROM colectivos;" ;
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {e.printStackTrace();}
 	}
@@ -57,7 +57,7 @@ public class MYSQLBase
 	public void updateColectivo(JSONObject o)
 	{
 		try {
-			String sql = "UPDATE colectivos SET cl = 1 WHERE id = " + Integer.toString(o.getInt("id"));
+			String sql = "UPDATE colectivos SET cl = 1,linea = '" + o.getString("linea") +  "' WHERE id = " + Integer.toString(o.getInt("id"));
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {e.printStackTrace();}
 	}	
@@ -81,6 +81,16 @@ public class MYSQLBase
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	
+	public void insertColec_rcd(JSONObject o)
+	{
+		try {
+			String sql = "INSERT INTO colec_rcd (id,name,bandera,linea) " +
+						 "VALUES (" + Integer.toString(o.getInt("id")) + ",'" + o.getString("name") 
+						 + "','" + o.getString("bandera") + "','" + o.getString("linea")  +  "' );"; 
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}
+
 	public void insertParadas(JSONObject o)
 	{
 		try {

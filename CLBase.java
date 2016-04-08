@@ -20,7 +20,9 @@ public class CLBase
 			
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS recorridos (id INTEGER, sentido TEXT , desc TEXT)");
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS rcdreng (id INTEGER, sentido TEXT , num INTEGER, lat TEXT, lon TEXT)");
-			
+			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS colec_rcd (id INTEGER, name TEXT, bandera TEXT , linea TEXT)");
+
+
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS geostreetD (idCalle INTEGER, idInter INTEGER,lat DOUBLE,lng DOUBLE, sin_lat DOUBLE , cos_lat DOUBLE , sin_lng DOUBLE, cos_lng DOUBLE)");
 			
 			System.out.println("Opened database successfully");
@@ -33,7 +35,7 @@ public class CLBase
 	public void deleteRecorridosTable()
 	{
 		try {
-			String sql = "DELETE FROM colectivos;" ;
+			String sql = "DELETE FROM colec_rcd;" ;
 			stmt.executeUpdate(sql);
 			sql = "DELETE FROM recorridos;" ;
 			stmt.executeUpdate(sql);
@@ -55,9 +57,9 @@ public class CLBase
 		try {
 			String sql = "DELETE FROM calles;" ;
 			stmt.executeUpdate(sql);
-			//sql = "DELETE FROM colectivos;" ;
-			//stmt.executeUpdate(sql);
 			sql = "DELETE FROM paradas;" ;
+			stmt.executeUpdate(sql);
+			sql = "DELETE FROM colectivos;" ;
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {e.printStackTrace();}
 	}
@@ -81,10 +83,21 @@ public class CLBase
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	
+	public void insertColec_rcd(JSONObject o)
+	{
+		try {
+			String sql = "INSERT INTO colec_rcd (id,name,bandera,linea) " +
+						 "VALUES (" + Integer.toString(o.getInt("id")) + ",'" + o.getString("name") 
+						 + "','" + o.getString("bandera") + "','" + o.getString("linea")  +  "');"; 
+			stmt.executeUpdate(sql);
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
+
 	public void updateColectivo(JSONObject o)
 	{
 		try {
-			String sql = "UPDATE colectivos SET cl = 1 WHERE id = " + Integer.toString(o.getInt("id"));
+			String sql = "UPDATE colectivos SET cl = 1,linea = '" + o.getString("linea") +  "' WHERE id = " + Integer.toString(o.getInt("id"));
 			stmt.executeUpdate(sql);
 		} catch (Exception e) {e.printStackTrace();}
 	}	

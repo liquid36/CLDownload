@@ -171,7 +171,7 @@ public class WebParsing
 					String lastWord = nombre.substring(in + 1);
 					nombre = nombre.substring(0,in);
 					
-					String jo     = "{\"id\":" + slinea  + " ,\"linea\": \"" + nombre + "\" , \"bandera\": \"" + lastWord + "\",\"name\": \"" + nombre + "\", \"cl\":false   }"  ;
+					String jo     = "{\"id\":" + slinea  + " ,\"linea\": \"" + "\" , \"bandera\": \"" + lastWord + "\",\"name\": \"" + nombre + "\", \"cl\":false   }"  ;
 					JSONObject o = new JSONObject(jo);
 					//System.console().writer().println(jo);
 					list.put(o);

@@ -27,8 +27,8 @@ public class RCDDownload
 		for(int i = 0 ; i < lines.length();i++) {
 			try {
 				JSONObject oC = lines.getJSONObject(i);
-				db.insertColectivo(oC);
-				mysql.insertColectivo(oC);
+				db.insertColec_rcd(oC);
+				mysql.insertColec_rcd(oC);
 				System.console().writer().println("Buscando Recorridos para " + oC.getInt("id") );
 				findRecorridos(oC.getInt("id"));
 			} catch (Exception e) {e.printStackTrace(); }
